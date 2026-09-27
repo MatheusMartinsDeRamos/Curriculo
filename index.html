@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080f18" />
+    <meta name="description" content="Explore a trajetória de Matheus Martins de Ramos. Martech, CRM, Salesforce e tecnologia para conectar negócios e experiências de clientes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Operação Órbita · Matheus Martins de Ramos" />
+    <meta property="og:description" content="Uma carreira que conecta dados, tecnologia e experiências de clientes. Embarque nessa exploração." />
+    <meta property="og:url" content="https://matheusmartinsderamos.github.io/Curriculo/" />
+    <link rel="canonical" href="https://matheusmartinsderamos.github.io/Curriculo/" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>Operação Órbita · Matheus Martins de Ramos</title>
+  </head>
+  <body>
+    <a class="skip-link" href="./curriculo.html">Ir para o currículo completo</a>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Operação Órbita, início"><span class="brand-symbol" aria-hidden="true">◎</span><span>OPERAÇÃO <strong>ÓRBITA</strong><small>PORTFÓLIO INTERATIVO</small></span></a>
+      <nav aria-label="Navegação principal"><a href="#trajetoria">Trajetória</a><a href="#jornadas">Projetos</a><a href="./curriculo.html">Currículo <span aria-hidden="true">↗</span></a><a class="nav-contact" href="#conexao">Vamos conversar <span aria-hidden="true">↗</span></a></nav>
+      <button class="icon-button settings-button" title="Preferências de som e movimento" aria-label="Preferências de som e movimento"><span aria-hidden="true">☷</span></button>
+    </header>
+    <main id="main">
+      <section class="flight-deck" aria-labelledby="hero-title">
+        <div class="deck-coordinate" aria-hidden="true"><span>SETOR 01 / VIA PROFISSIONAL</span><span>EST. 2014 — EM EXPANSÃO</span></div>
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> NEGÓCIOS, DADOS & TECNOLOGIA</p>
+          <h1 id="hero-title">Conectando pontos.<br />Criando <em>órbitas.</em></h1>
+          <div class="hero-identity"><span class="identity-line"></span><div><h2>Matheus Martins de Ramos</h2><p>Martech Specialist <span>·</span> CRM Specialist</p></div></div>
+          <p class="hero-description">Transformo desafios de negócio em jornadas de clientes.<br class="wide-only" /> Explore os caminhos que me trouxeram até aqui.</p>
+          <div class="hero-actions"><button class="button button-primary" id="pilot-button"><span aria-hidden="true">↗</span> Explorar o universo</button><a class="button button-secondary" href="./curriculo.html">Ver currículo <span aria-hidden="true">↗</span></a></div>
+          <p class="hero-footnote"><span aria-hidden="true">⌘</span> Uma pequena viagem. Muitas conexões.</p>
+        </div>
+        <div class="universe" id="universe" role="region" aria-label="Mapa estelar interativo. Escolha um dos seis planetas.">
+          <div class="starfield" id="starfield" aria-hidden="true"></div>
+          <svg class="orbit-lines" viewBox="0 0 850 650" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="436" cy="322" rx="328" ry="217" transform="rotate(-22 436 322)"/><ellipse cx="436" cy="322" rx="212" ry="128" transform="rotate(-22 436 322)"/><path d="M122 289L423 125L696 191L601 391L371 512L749 542"/><circle cx="436" cy="322" r="42"/><path class="axis" d="M420 322h32m-16-16v32"/></svg>
+          <div id="planet-nodes"></div>
+          <div id="ship" class="ship" aria-hidden="true"><svg viewBox="0 0 70 82"><defs><linearGradient id="hull" x2="1" y2="1"><stop stop-color="#f0eee1"/><stop offset="1" stop-color="#778e9b"/></linearGradient></defs><path class="exhaust" d="M29 59L35 81L41 59" fill="#a3f4df"/><path d="M35 5L48 40L62 60L45 55L35 63L25 55L8 60L22 40Z" fill="url(#hull)" stroke="#d7e8e8" stroke-width="1.2"/><path d="M35 15L40 41L35 48L30 41Z" fill="#2e646c"/><path d="M22 40L25 55M48 40L45 55M35 48v15" stroke="#3b535e" fill="none"/><path d="M19 48L15 54M51 48L55 54" stroke="#eabe7c" stroke-width="2"/></svg></div>
+          <span class="map-axis-label" aria-hidden="true">ÓRBITA DE POSSIBILIDADES</span>
+        </div>
+        <div class="pilot-hud" hidden><div><span class="status-dot"></span> NAVEGAÇÃO LIVRE <small id="flight-status" role="status">Aproxime-se de um planeta ou abra o mapa.</small></div><button class="button button-secondary" id="exit-flight">Encerrar voo <span aria-hidden="true">×</span></button></div>
+        <div class="flight-controls" hidden><span class="keyboard-help"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> ou setas <i></i><kbd>E</kbd> pousar <i></i><kbd>M</kbd> mapa</span><button id="land-button" class="button button-primary" disabled>Pousar <span aria-hidden="true">↓</span></button></div>
+        <div class="deck-bottom"><span><span class="status-dot"></span> TODOS OS DESTINOS ABERTOS</span><button id="map-button">Abrir mapa <kbd>M</kbd> <span aria-hidden="true">↗</span></button></div>
+      </section>
+      <section class="destination-section" aria-labelledby="destination-title"><div class="section-heading"><h2 id="destination-title">Escolha seu próximo destino</h2><span>06 PLANETAS · SEM ROTA OBRIGATÓRIA</span></div><div id="destination-list" class="destination-list"></div></section>
+      <section class="signal-strip" aria-label="Destaques profissionais"><div class="signal-intro"><span class="signal-icon" aria-hidden="true">⌁</span><p>Da estratégia à execução.<br /><strong>Impacto que vai além da órbita.</strong></p></div><a href="#jornadas"><strong>~75<span>%</span></strong><small>menos tempo nas campanhas<em>CASE WORTEN ↗</em></small></a><a href="#sistemas"><strong><span>≈</span>30</strong><small>blocos de e-mail reutilizáveis<em>TECNOLOGIA COM AUTONOMIA ↗</em></small></a><a href="#trajetoria" class="current-role"><span class="status-dot"></span><div><small>ATUALMENTE NA OVERLABS</small><strong>Salesforce Specialist / Tech Lead</strong></div><span aria-hidden="true">↗</span></a></section>
+    </main>
+    <footer class="site-footer"><span>© <span id="year">2026</span> Matheus Martins de Ramos</span><span>Feito de curiosidade, código e conexões.</span><a href="./curriculo.pdf" target="_blank" rel="noopener">Currículo em PDF <span aria-hidden="true">↓</span></a></footer>
+    <div id="touch-controls" class="touch-controls" hidden aria-label="Controles direcionais"><button data-direction="up" aria-label="Mover para cima">↑</button><button data-direction="left" aria-label="Mover para a esquerda">←</button><button data-direction="down" aria-label="Mover para baixo">↓</button><button data-direction="right" aria-label="Mover para a direita">→</button></div>
+    <button id="mobile-map-button" class="mobile-map-button" aria-label="Abrir mapa de destinos"><span aria-hidden="true">◎</span> Mapa</button>
+    <dialog id="planet-dialog" class="planet-dialog" aria-labelledby="planet-title"></dialog>
+    <dialog id="map-dialog" class="map-dialog" aria-labelledby="map-title"><div class="dialog-topline"><span class="eyebrow">NAVEGAÇÃO DIRETA</span><button class="icon-button" data-close="map-dialog" aria-label="Fechar mapa">×</button></div><h2 id="map-title">Um universo de conexões.</h2><p>Escolha um destino. A ordem é toda sua.</p><div id="map-destinations"></div><div class="map-footer"><span class="status-dot"></span> Não é preciso pilotar para explorar.</div></dialog>
+    <dialog id="tutorial-dialog" class="tutorial-dialog" aria-labelledby="tutorial-title"><div class="dialog-topline"><span class="eyebrow">ANTES DE DECOLAR</span><button class="icon-button" data-close="tutorial-dialog" aria-label="Fechar instruções">×</button></div><div class="tutorial-orbit" aria-hidden="true">↗</div><h2 id="tutorial-title">O universo está aberto.</h2><p>Você escolhe o caminho. Sem pressa, sem pontuação.</p><div class="tutorial-steps"><div><span>01</span><strong>Pilote</strong><p>Use WASD, as setas ou os controles na tela.</p></div><div><span>02</span><strong>Explore</strong><p>Aproxime-se e pressione E, ou clique em um planeta.</p></div><div><span>03</span><strong>Conecte</strong><p>Dentro dos planetas, visite as estações. M abre o mapa.</p></div></div><button class="button button-primary" id="launch-button">Vamos decolar <span aria-hidden="true">↗</span></button><button class="text-button" id="skip-tutorial">Prefiro escolher pelo mapa</button></dialog>
+    <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title"><div class="dialog-topline"><span class="eyebrow">AJUSTES DE BORDO</span><button class="icon-button" data-close="settings-dialog" aria-label="Fechar preferências">×</button></div><h2 id="settings-title">Do seu jeito.</h2><label class="setting-row"><span><strong>Som da nave</strong><small>Efeitos suaves durante a exploração</small></span><input type="checkbox" id="sound-toggle" /></label><label class="setting-row"><span>Volume</span><input type="range" id="sound-volume" min="0" max="100" value="25" /></label><label class="setting-row"><span><strong>Reduzir movimento</strong><small>Desativa efeitos contínuos e suavização</small></span><input type="checkbox" id="motion-toggle" /></label><p class="settings-note">As preferências ficam apenas neste navegador.</p></dialog>
+    <div class="sr-only" role="status" aria-live="polite" id="announcement"></div>
+    <noscript><div class="noscript-message">Explore o <a href="./curriculo.html">currículo completo em texto</a>, <a href="./curriculo.pdf">abra o PDF</a> ou <a href="mailto:matheusmartinsderamos@gmail.com">entre em contato</a>. A pilotagem utiliza JavaScript.</div></noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

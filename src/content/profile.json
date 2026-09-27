@@ -1,0 +1,81 @@
+{
+  "locale": "pt-BR",
+  "updatedAt": "2026-09-27",
+  "name": "Matheus Martins de Ramos",
+  "title": "Martech Specialist | CRM Specialist",
+  "summary": "Analista de Martech com sólida experiência em CRM, automação de campanhas e design de jornada do cliente. Conecto soluções técnicas e estratégias de marketing para entregar resultados eficientes e escaláveis, combinando dados, criatividade e comunicação clara.",
+  "contact": {
+    "email": "matheusmartinsderamos@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/matheusramoscrm/",
+    "whatsapp": "https://wa.me/5551996193978",
+    "phone": "+55 (51) 99619-3978"
+  },
+  "experience": [
+    {
+      "company": "Overlabs",
+      "role": "Salesforce Specialist | Tech Lead",
+      "period": "03/2026 — atual",
+      "details": ["Liderança hands-on do ecossistema Salesforce: Marketing Cloud Engagement, Marketing Cloud Personalization, Data 360 / Data Cloud, Sales Cloud, Service Cloud e MuleSoft.", "Interface direta com o cliente para traduzir necessidades de negócio em soluções técnicas executadas por mim ou pelo time de tecnologia.", "Atuação em projeto que abrange os países da América Latina."]
+    },
+    {
+      "company": "Worten Portugal",
+      "role": "Martech Analyst — Sênior",
+      "period": "02/2025 — 02/2026",
+      "location": "Remoto",
+      "details": ["Desenvolvimento de jornadas e automações complexas; organização de Content Builder, Data Extensions e Automations seguindo boas práticas.", "Criação de um modelo drag-and-drop de e-mails com cerca de 30 blocos dinâmicos, padronizados e reutilizáveis, mesmo por profissionais sem conhecimento de HTML e AMPscript.", "Redução aproximada de 75% no tempo de execução das campanhas, principalmente pontuais, e maior autonomia para a equipe de operação.", "Desenvolvimento de soluções técnicas e integrações; levantamento de requisitos, mockups de comunicações, disparos e análise de dados de campanhas."]
+    },
+    {
+      "company": "Stone",
+      "role": "CRM Analyst and Developer — Pleno",
+      "period": "10/2023 — 11/2024",
+      "location": "Remoto",
+      "details": ["Migração de jornadas para Salesforce e automação do processo de crédito.", "Participação no time de growth e estratégia, com disparos pontuais para apoiar as metas.", "Participação em análises, definições e desenvolvimento da arquitetura da plataforma.", "Uso de SQL, SSJS e AMPscript nas automações de crédito."]
+    },
+    {
+      "company": "Pmweb",
+      "role": "Digital Campaigns Analyst — Salesforce / Pleno",
+      "period": "08/2022 — 09/2023",
+      "location": "Porto Alegre, Brasil",
+      "details": ["Implementação de estratégias de clientes no Salesforce Marketing Cloud, com foco em e-mail marketing.", "Colaboração com equipes de dados e estratégia para desenvolver soluções para clientes novos e existentes.", "Análises de KPI e recomendações de melhorias técnicas e estratégicas.", "Clientes: HP (LATAM e Canadá), Inspirali, Sicoob e Stone."]
+    },
+    {
+      "company": "Pmweb",
+      "role": "Digital Campaigns Analyst — Responsys / Pleno",
+      "period": "02/2022 — 08/2022",
+      "location": "Porto Alegre, Brasil",
+      "details": ["Clientes: Avon, Dell, Fast Shop, FDC, Havan, Lebes, Panvel, Queima Diária, Renner, Tramontina (Brasil e EUA), Vinho Fácil, Wine e Youcom."]
+    },
+    {"company": "Pmweb", "role": "Digital Campaigns Analyst — Júnior", "period": "01/2021 — 02/2022", "location": "Porto Alegre, Brasil", "details": []},
+    {"company": "Soluções eSales", "role": "Automation Test Developer — Júnior", "period": "03/2020 — 06/2020", "location": "Porto Alegre, Brasil", "details": []},
+    {"company": "e-Sales Soluções de Integração", "role": "Quality Assurance Analyst — Júnior", "period": "12/2018 — 03/2020", "location": "Porto Alegre, Brasil", "details": []},
+    {"company": "e-Sales Soluções de Integração", "role": "Implementation Analyst — Pleno", "period": "03/2018 — 12/2018", "location": "Porto Alegre, Brasil", "details": []},
+    {"company": "e-Sales Soluções de Integração", "role": "Implementation Analyst — Júnior", "period": "01/2016 — 03/2018", "location": "Porto Alegre, Brasil", "details": []},
+    {"company": "e-Sales Soluções de Integração", "role": "Aprendiz", "period": "11/2014 — 12/2015", "location": "Porto Alegre, Brasil", "details": []}
+  ],
+  "projects": [
+    {"id": "worten", "company": "Worten Portugal", "title": "Menos repetição. Mais autonomia.", "context": "Operação de campanhas no Salesforce Marketing Cloud, entre fevereiro de 2025 e fevereiro de 2026.", "challenge": "Facilitar a montagem de e-mails e o trabalho da equipe de operação, inclusive para quem não domina HTML e AMPscript.", "action": "Criei um modelo drag-and-drop no Content Builder com cerca de 30 blocos dinâmicos, padronizados e reutilizáveis.", "result": "Redução aproximada de 75% no tempo de execução das campanhas, principalmente pontuais, e maior autonomia para a equipe.", "tags": ["Content Builder", "AMPscript", "HTML", "Componentes reutilizáveis"]},
+    {"id": "stone", "company": "Stone", "title": "Jornadas conectadas à operação.", "context": "Atuação como CRM Analyst and Developer, de outubro de 2023 a novembro de 2024.", "challenge": "Migrar jornadas para Salesforce e automatizar o processo de crédito.", "action": "Migrei jornadas e trabalhei com SQL, SSJS e AMPscript nas automações. Também participei das análises e definições da arquitetura da plataforma.", "result": "Jornadas migradas e processo de crédito automatizado. O currículo não informa uma métrica quantitativa para essa entrega.", "tags": ["Salesforce", "SQL", "SSJS", "Automação"]}
+  ],
+  "skills": [
+    {"title": "Ecossistema Salesforce", "items": ["Marketing Cloud Engagement", "Marketing Cloud Personalization", "Data 360 / Data Cloud", "Sales Cloud", "Service Cloud", "MuleSoft"]},
+    {"title": "Desenvolvimento e integrações", "items": ["HTML", "CSS", "JavaScript", "SSJS", "AMPscript", "SQL", "Integrações por API", "Python", "PHP", "Git / GitHub"]},
+    {"title": "Dados e estratégia", "items": ["Jornadas de clientes", "Automação de campanhas", "Análise de KPI", "Power BI", "CDPs", "Prompt design para IA generativa"]}
+  ],
+  "certifications": ["Salesforce Certified Marketing Cloud Email Specialist", "Salesforce Certified AI Associate", "Associate Salesforce"],
+  "education": [
+    {"title": "Tecnólogo em Análise e Desenvolvimento de Sistemas", "institution": "Universidade La Salle", "period": "02/2022 — 12/2025", "location": "Canoas, Brasil"},
+    {"title": "Curso Técnico em Informática para Web", "institution": "Alcides Maya", "period": "2015 — 2016", "location": "Porto Alegre, Brasil", "description": "Técnico em Informática com ênfase em desenvolvimento web."}
+  ],
+  "mentorship": {
+    "title": "Mentor voluntário & freelancer — CRM Tech",
+    "period": "06/2024 — atual",
+    "volunteer": "Orientação voluntária para pessoas que querem iniciar ou migrar de carreira e não têm como pagar uma consultoria. Apoio desde os estudos iniciais e a preparação para entrevistas até os primeiros meses na área de CRM.",
+    "companies": "Projetos específicos de curto prazo para empresas, orientando e treinando profissionais de nível iniciante a intermediário em Salesforce Marketing Cloud, HTML, CSS, linguagens de programação e funcionalidades avançadas da plataforma."
+  },
+  "languages": [
+    {"name": "Português brasileiro", "level": "Nativo"},
+    {"name": "Espanhol", "level": "Intermediário"},
+    {"name": "Inglês", "level": "Em estudo — nível B1 em leitura e escrita; conversação básica"},
+    {"name": "Português europeu", "level": "Um ano de convivência com equipe de Portugal; domínio dos termos e diferenças em relação ao português brasileiro"}
+  ]
+}
