@@ -1,5 +1,6 @@
 import './styles.css';
 import profile from './content/profile.json';
+import { GalaxyView } from './galaxy-view';
 import { planets, type Planet } from './content/planets';
 import { advancePosition, directionVector, nearestPlanet, buildJourney, missionOptions } from './flight.mjs';
 
@@ -21,7 +22,8 @@ let flying = false;
 let activePlanet: Planet | null = null;
 let activeStation = 0;
 let shipPosition = { x: 48, y: 52 };
-let roverPosition = { x: 27, y: 79 };
+let galaxy: GalaxyView | null = null;
+let worldView: 'game' | 'content' = 'game';
 let shipAngle = 32;
 let velocity = { x: 0, y: 0 };
 let closest: Planet | null = null;
@@ -69,12 +71,10 @@ function tone(kind: 'land' | 'select' | 'launch' = 'select') {
   } catch { sound = false; $<HTMLInputElement>('#sound-toggle').checked = false; }
 }
 
-function clearControls() { keys.clear(); velocity = { x: 0, y: 0 }; ship.classList.remove('moving'); }
+function clearControls() { keys.clear(); velocity = { x: 0, y: 0 }; ship.classList.remove('moving', 'boosting'); universe.classList.remove('warping'); }
 function announce(message: string) { $('#announcement').textContent = message; }
 function syncTouchControls() {
   $('#touch-controls').hidden = !touchMedia.matches || !flying || !!document.querySelector('dialog[open]');
-  const surfaceTouch = planetDialog.querySelector<HTMLElement>('.touch-controls');
-  if (surfaceTouch) surfaceTouch.hidden = !touchMedia.matches;
 }
 function syncScrollLock() {
   document.body.style.overflow = document.querySelector('dialog[open]') ? 'hidden' : '';
@@ -83,6 +83,7 @@ function syncScrollLock() {
 }
 function showDialog(dialog: HTMLDialogElement) {
   clearControls();
+  if (dialog !== planetDialog) galaxy?.pause();
   if (!dialog.open) dialog.showModal();
   syncScrollLock();
 }
@@ -99,7 +100,7 @@ function travel(id: string) {
   else location.hash = id;
 }
 
-// All navigation remains ordinary HTML links and buttons; there is no Canvas dependency.
+// Direct links keep the professional content accessible alongside the optional Canvas games.
 $('#planet-nodes').innerHTML = planets.map((planet, index) => `<button class="planet-node" data-planet="${planet.id}" data-travel="${planet.id}" style="--x:${planet.x}%;--y:${planet.y}%;--size:${planet.size}px;--color:${planet.color}" aria-label="Explorar planeta ${planet.name}: ${planet.description}"><span class="planet-visual" aria-hidden="true"></span><span class="planet-label"><small>0${index + 1}</small>${planet.name}</span><span class="planet-subtitle">${planet.region}</span></button>`).join('');
 $('#destination-list').innerHTML = planets.map((planet, index) => `<a class="destination-card" href="#${planet.id}" style="--color:${planet.color}"><span class="destination-mark" aria-hidden="true">0${index + 1}</span><div><h3>${planet.name}</h3><p>${planet.description}</p></div><span class="destination-arrow" aria-hidden="true">↗</span></a>`).join('');
 $('#map-destinations').innerHTML = planets.map((planet, index) => `<button class="map-destination" data-travel="${planet.id}" style="--color:${planet.color}"><span class="planet-visual" aria-hidden="true" style="--color:${planet.color}"></span><div><small>0${index + 1} / ${planet.region}</small><h3>${planet.name}</h3><p>${planet.description}</p></div></button>`).join('');
@@ -121,7 +122,7 @@ function startFlying() {
   $('#land-button').focus({ preventScroll: true });
   $('#exit-flight').focus({ preventScroll: true });
   $('.flight-deck').scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'start' });
-  announce('Pilotagem ativada. Use WASD ou as setas. Pressione E perto de um planeta para pousar.');
+  announce('Pilotagem ativada. Use WASD ou as setas e Shift para velocidade da luz. Pressione E perto de um planeta para pousar.');
 }
 function endFlying() {
   flying = false;
@@ -137,31 +138,30 @@ function endFlying() {
   announce('Voo encerrado. Todos os planetas continuam disponíveis pelo mapa e pelo menu.');
 }
 
-function landscape(planet: Planet) {
-  const index = planets.indexOf(planet);
-  const peaks = ['0,200 58,143 112,181 169,101 242,187 317,125 408,198 500,157 560,210', '0,165 65,165 65,101 114,101 114,193 212,193 212,148 271,148 271,78 316,78 316,171 410,171 410,121 500,121 560,189', '0,201 80,137 141,204 218,148 276,214 361,133 422,207 502,155 560,189', '0,198 57,149 101,149 147,94 190,163 251,163 304,111 360,194 407,143 461,173 560,174', '0,176 41,138 86,190 151,131 214,192 271,131 334,184 389,143 467,201 513,141 560,192', '0,192 74,159 140,201 218,161 277,208 340,159 398,198 465,151 560,179'][index];
-  return `<svg class="landscape" viewBox="0 0 560 420" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="ground" x2="0" y2="1"><stop stop-color="${planet.color}" stop-opacity=".12"/><stop offset="1" stop-color="${planet.color}" stop-opacity=".025"/></linearGradient><radialGradient id="sun"><stop stop-color="${planet.color}" stop-opacity=".22"/><stop offset="1" stop-color="${planet.color}" stop-opacity="0"/></radialGradient></defs><circle cx="393" cy="100" r="100" fill="url(#sun)"/><circle cx="393" cy="100" r="28" fill="${planet.color}" opacity=".12"/><ellipse cx="393" cy="100" rx="51" ry="10" fill="none" stroke="${planet.color}" opacity="${index === 2 ? .35 : .1}" transform="rotate(-25 393 100)"/><g fill="${planet.color}" opacity=".45"><circle cx="82" cy="67" r="1"/><circle cx="208" cy="91" r="1.2"/><circle cx="315" cy="34" r="1"/><circle cx="454" cy="45" r="1"/><circle cx="497" cy="134" r="1.2"/><circle cx="155" cy="32" r="1"/></g><polygon points="${peaks} 560,420 0,420" fill="${planet.color}" opacity=".075"/><path d="M0 242Q120 169 245 232T560 230V420H0Z" fill="url(#ground)"/><g stroke="${planet.color}" fill="none" opacity=".09"><path d="M0 279H560M0 333H560M0 403H560M65 420L234 225M206 420L265 225M357 420L305 225M506 420L340 225"/><path stroke-dasharray="3 5" d="M136 238L372 175L410 344L149 348Z"/></g><g fill="${planet.color}" opacity=".18"><path d="M37 325l7-6 13 7-7 4zM307 285l6-4 9 4-4 3zM476 364l9-7 14 7-9 5zM182 404l7-5 11 6-7 4z"/></g></svg>`;
+function setWorldView(view: 'game' | 'content') {
+  worldView = view;
+  clearControls();
+  if (view === 'content') galaxy?.pause();
+  $('#galaxy-game').hidden = view !== 'game';
+  $('#world-content').hidden = view !== 'content';
+  $('#world-game-tab').setAttribute('aria-pressed', String(view === 'game'));
+  $('#world-content-tab').setAttribute('aria-pressed', String(view === 'content'));
+  ensureFrame();
 }
-function stationArt(index: number, color: string) {
-  const structures = [
-    `<ellipse cx="45" cy="67" rx="40" ry="10" fill="${color}" opacity=".08"/><path d="M12 58A33 33 0 0 1 78 58V67H12Z" fill="#182d36" stroke="${color}" stroke-opacity=".65"/><path d="M18 53A28 28 0 0 1 72 53" fill="none" stroke="${color}" stroke-opacity=".3"/><path d="M45 25V58M13 58H77M30 31L28 58M60 31L62 58" fill="none" stroke="${color}" stroke-opacity=".25"/><path d="M37 52H53V68H37Z" fill="#09171f" stroke="${color}" stroke-opacity=".5"/><path d="M17 62H27M63 62H73" stroke="${color}"/><path d="M45 24V12" stroke="${color}"/><circle cx="45" cy="10" r="2" fill="${color}"/>`,
-    `<ellipse cx="45" cy="68" rx="39" ry="9" fill="${color}" opacity=".08"/><path d="M18 36L48 22L76 36V64L47 76L18 63Z" fill="#18303a" stroke="${color}" stroke-opacity=".65"/><path d="M18 36L47 49L76 36M47 49V76" fill="none" stroke="${color}" stroke-opacity=".45"/><path d="M25 43L39 49V61L25 55Z" fill="${color}" opacity=".4"/><path d="M54 50L68 44V49L54 55Z" fill="${color}" opacity=".55"/><path d="M54 61L68 55" stroke="${color}" stroke-opacity=".4"/><path d="M48 22V11M43 11H53" stroke="${color}"/><circle cx="48" cy="9" r="2" fill="${color}"/>`,
-    `<ellipse cx="45" cy="70" rx="38" ry="9" fill="${color}" opacity=".08"/><path d="M25 70L43 36L60 70Z" fill="#193039" stroke="${color}" stroke-opacity=".5"/><path d="M18 13Q12 49 53 47Z" fill="#25404a" stroke="${color}" stroke-opacity=".7"/><path d="M25 21L47 33L59 14" fill="none" stroke="${color}" stroke-opacity=".6"/><circle cx="59" cy="14" r="3" fill="${color}"/><path d="M68 8Q80 21 69 33M76 2Q94 22 79 42" fill="none" stroke="${color}" stroke-opacity=".3"/><path d="M20 70H67" stroke="${color}"/>`,
-  ];
-  return `<svg viewBox="0 0 94 82" aria-hidden="true">${structures[index]}</svg>`;
-}
-function roverArt() { return `<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M5 18L3 27M19 18L21 27M8 25V32M16 25V32" stroke="#9dafb2" stroke-width="3"/><rect x="5" y="12" width="14" height="14" rx="4" fill="#cbdbd6"/><circle cx="12" cy="9" r="8" fill="#dfe9e1"/><path d="M6 5Q12 2 18 5V11Q12 15 6 11Z" fill="#467078"/><path d="M9 7H15" stroke="#b6e8d8"/></svg>`; }
-function openPlanet(id: string, station = 0) {
+function openPlanet(id: string, station?: number) {
   const planet = planets.find(item => item.id === id);
   if (!planet) return;
   if (mapDialog.open) mapDialog.close();
   if (tutorial.open) tutorial.close();
   if (settings.open) settings.close();
-  clearControls(); activePlanet = planet; activeStation = station; roverPosition = { x: 27, y: 79 };
+  galaxy?.destroy(); galaxy = null;
+  clearControls(); activePlanet = planet; activeStation = station ?? 0;
   const index = planets.indexOf(planet);
   planetDialog.style.setProperty('--planet-color', planet.color);
-  planetDialog.innerHTML = `<div class="dialog-topline"><span class="eyebrow"><span class="status-dot" style="background:${planet.color}"></span> PLANETA ${planet.name.toLocaleUpperCase('pt-BR')} / ${planet.region}</span><button class="text-button" id="takeoff-button">Decolar <span aria-hidden="true">↗</span></button></div><header class="planet-heading"><div><p class="eyebrow">${planet.kicker}</p><h2 id="planet-title">${planet.headline}</h2></div><span class="planet-index" aria-hidden="true">0${index + 1}</span></header><div class="planet-body"><div class="surface-column"><div class="surface-scene" role="region" aria-label="Base explorável de ${planet.name}">${landscape(planet)}<span class="surface-caption">BASE 0${index + 1} / CLIQUE EM UMA ESTAÇÃO</span>${planet.stations.map((name, i) => `<button class="station" data-station="${i}" aria-pressed="${i === station}" aria-label="Explorar ${name}">${stationArt(i, planet.color)}<span class="station-number">0${i + 1}</span><span class="station-name">${name}</span></button>`).join('')}<div class="rover" aria-hidden="true">${roverArt()}</div><div class="touch-controls" ${touchMedia.matches ? '' : 'hidden'} aria-label="Mover explorador">${['up','left','down','right'].map((direction, i) => `<button data-direction="${direction}" aria-label="Mover para ${['cima','a esquerda','baixo','a direita'][i]}">${['↑','←','↓','→'][i]}</button>`).join('')}</div></div><div class="surface-help"><span>WASD / setas para caminhar. E abre a estação mais próxima. Ou escolha abaixo.</span><button id="surface-map" aria-label="Abrir mapa estelar">Mapa ↗</button></div><nav class="surface-tabs" aria-label="Estações de ${planet.name}">${planet.stations.map((name, i) => `<button data-station="${i}" aria-pressed="${i === station}">${name}</button>`).join('')}</nav></div><section class="station-content" id="station-content" tabindex="-1" aria-label="Conteúdo da estação"></section></div>`;
-  renderStation(station);
+  planetDialog.innerHTML = `<div class="dialog-topline"><span class="eyebrow"><span class="status-dot" style="background:${planet.color}"></span> PLANETA ${planet.name.toLocaleUpperCase('pt-BR')} / ${planet.region}</span><button class="text-button" id="takeoff-button">Decolar <span aria-hidden="true">↗</span></button></div><header class="planet-heading"><div><p class="eyebrow">${planet.kicker}</p><h2 id="planet-title">${planet.headline}</h2></div><span class="planet-index" aria-hidden="true">0${index + 1}</span></header><nav class="world-tabs" aria-label="Explorar planeta"><button id="world-game-tab" aria-pressed="true" aria-controls="galaxy-game">✦ Explorar galáxia</button><button id="world-content-tab" aria-pressed="false" aria-controls="world-content">Estações & currículo</button><button id="surface-map" class="world-map">Mapa ↗</button></nav><section id="galaxy-game" aria-label="Minigame de ${planet.name}"></section><div id="world-content" class="world-content" hidden><nav class="surface-tabs" aria-label="Estações de ${planet.name}">${planet.stations.map((name, i) => `<button data-station="${i}" aria-pressed="${i === activeStation}">${name}</button>`).join('')}</nav><section class="station-content" id="station-content" tabindex="-1" aria-label="Conteúdo da estação"></section></div>`;
+  galaxy = new GalaxyView($('#galaxy-game'), planet.id, message => { announce(message); tone(); }, clearControls);
+  renderStation(activeStation);
+  setWorldView(station === undefined ? 'game' : 'content');
   showDialog(planetDialog);
   planetDialog.scrollTop = 0;
   tone('land');
@@ -169,6 +169,7 @@ function openPlanet(id: string, station = 0) {
 }
 function closePlanet() {
   if (!planetDialog.open) return;
+  galaxy?.destroy(); galaxy = null;
   planetDialog.close();
   activePlanet = null;
   if (planets.some(planet => location.hash.startsWith(`#${planet.id}`))) history.replaceState(null, '', location.pathname + location.search);
@@ -180,7 +181,7 @@ function experienceEntries(start: number, end: number) {
 }
 function project(index: number) {
   const item = profile.projects[index];
-  return `<p class="eyebrow">${item.company.toUpperCase()} / CASE REAL</p><h3>${item.title}</h3>${index === 0 ? '<div class="project-metric"><strong>~75%</strong><span>menos tempo na execução de campanhas,<br />principalmente pontuais.</span></div>' : ''}${[['Contexto', item.context], ['Desafio', item.challenge], ['Minha ação', item.action], ['Resultado', item.result]].map(([title, text]) => `<div class="project-detail"><h4>${title}</h4><p>${escape(text)}</p></div>`).join('')}${tags(item.tags)}<p class="mission-note">Relato profissional de Matheus, conforme currículo de setembro de 2026.</p>${index === 0 ? '<button class="button button-secondary" data-station="2">Experimente a missão de CRM ↗</button>' : ''}`;
+  return `<p class="eyebrow">${item.company.toUpperCase()} / CASE REAL</p><h3>${item.title}</h3>${index === 0 ? '<div class="project-metric"><strong>~75%</strong><span>menos tempo na execução de campanhas,<br />principalmente pontuais.</span></div>' : ''}${[['Contexto', item.context], ['Desafio', item.challenge], ['Minha ação', item.action], ['Resultado', item.result]].map(([title, text]) => `<div class="project-detail"><h4>${title}</h4><p>${escape(text)}</p></div>`).join('')}${tags(item.tags)}<p class="mission-note">Relato profissional de Matheus, conforme currículo de setembro de 2026.</p>${index === 0 ? '<button class="button button-secondary" data-station="1">Experimente a missão de CRM ↗</button>' : ''}`;
 }
 function stationContent(planet: Planet, station: number): string {
   switch (planet.id) {
@@ -190,7 +191,7 @@ function stationContent(planet: Planet, station: number): string {
       `<p class="eyebrow">APRENDIZADO CONTÍNUO</p><h3>Uma base para seguir explorando.</h3>${profile.education.map(item => `<article class="qualification"><h4>${item.title}</h4><p>${item.institution} · ${item.location}</p><small>${item.period}</small>${item.description ? `<p>${item.description}</p>` : ''}</article>`).join('')}<h4>Idiomas</h4>${profile.languages.map(item => `<p><strong>${item.name}</strong><br />${item.level}</p>`).join('')}`,
     ][station];
     case 'trajetoria': return `<p class="eyebrow">${['TECNOLOGIA & LIDERANÇA', 'ESTRATÉGIA & CAMPANHAS', 'IMPLEMENTAÇÃO & QUALIDADE'][station]}</p><h3>${['Do CRM à liderança técnica.', 'O encontro com as jornadas.', 'Os primeiros sinais.'][station]}</h3>${[experienceEntries(0,3),experienceEntries(3,6),experienceEntries(6,11)][station]}<a class="button button-secondary" href="./curriculo.html">Ver currículo completo ↗</a>`;
-    case 'jornadas': return station < 2 ? project(station) : missionHTML();
+    case 'jornadas': return station === 0 ? project(0) : missionHTML();
     case 'sistemas': return [
       `<p class="eyebrow">PLATAFORMAS CONECTADAS</p><h3>Um ecossistema.<br />Muitas possibilidades.</h3><p>Liderança hands-on do ecossistema Salesforce na Overlabs, conectando as necessidades do cliente às soluções técnicas.</p>${tags(profile.skills[0].items)}<h4>Da estratégia à operação</h4><p>Experiência com jornadas, automações, Content Builder e Data Extensions. Na Pmweb, atuei também com campanhas em Oracle Responsys.</p><button class="button button-secondary" data-travel="jornadas">Ver tecnologia em ação ↗</button>`,
       `<p class="eyebrow">CONSTRUIR, INTEGRAR, ANALISAR</p><h3>Código a serviço<br />da experiência.</h3>${profile.skills.slice(1).map(item => `<h4>${item.title}</h4>${tags(item.items)}`).join('')}<p>SQL, SSJS e AMPscript aplicados em automações de crédito na Stone. HTML e componentes dinâmicos aplicados à construção de e-mails reutilizáveis na Worten.</p>`,
@@ -209,13 +210,14 @@ function stationContent(planet: Planet, station: number): string {
   }
 }
 function renderStation(station: number, focus = false) {
-  if (!activePlanet || station < 0 || station > 2) return;
+  if (!activePlanet || station < 0 || station >= activePlanet.stations.length) return;
   activeStation = station;
   const panel = $('#station-content');
   panel.innerHTML = stationContent(activePlanet, station);
   panel.scrollTop = 0;
   $$<HTMLButtonElement>('[data-station]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.station) === station)));
   if (focus) {
+    setWorldView('content');
     panel.focus({ preventScroll: true });
     if (innerWidth <= 650) panel.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'start' });
     tone();
@@ -256,6 +258,8 @@ document.addEventListener('click', event => {
   if (close) $<HTMLDialogElement>(`#${close.dataset.close}`).close();
   const button = target.closest('button');
   switch (button?.id) {
+    case 'world-game-tab': setWorldView('game'); break;
+    case 'world-content-tab': setWorldView('content'); break;
     case 'takeoff-button': closePlanet(); break;
     case 'map-button': case 'mobile-map-button': case 'surface-map': case 'skip-tutorial': openMap(); break;
     case 'pilot-button': showDialog(tutorial); break;
@@ -263,8 +267,8 @@ document.addEventListener('click', event => {
     case 'exit-flight': endFlying(); break;
     case 'land-button': if (closest) travel(closest.id); break;
     case 'copy-email': void copyEmail(); break;
-    case 'mission-back': if (missionStep > 0) { missionStep--; renderStation(2, true); } else renderStation(0, true); break;
-    case 'restart-mission': missionStep = 0; missionComplete = false; Object.keys(missionSelection).forEach(key => delete missionSelection[key]); renderStation(2, true); break;
+    case 'mission-back': if (missionStep > 0) { missionStep--; renderStation(1, true); } else renderStation(0, true); break;
+    case 'restart-mission': missionStep = 0; missionComplete = false; Object.keys(missionSelection).forEach(key => delete missionSelection[key]); renderStation(1, true); break;
   }
   if (target.closest('.settings-button')) showDialog(settings);
 });
@@ -286,15 +290,16 @@ document.addEventListener('submit', event => {
   if (!form.reportValidity()) return;
   for (const [key, value] of new FormData(form)) missionSelection[key] = String(value);
   if (missionStep === 2) missionComplete = true; else missionStep++;
-  renderStation(2, true);
+  renderStation(1, true);
 });
 
 function hashRoute() {
   const [id, detail] = location.hash.slice(1).split('/');
   if (planets.some(planet => planet.id === id)) {
-    const station = id === 'jornadas' ? ({ worten: 0, stone: 1, missao: 2 }[detail] ?? 0) : 0;
+    const station = id === 'jornadas' ? ({ worten: 0, missao: 1 }[detail]) : undefined;
+    if (id === 'jornadas' && detail === 'stone') history.replaceState(null, '', '#jornadas');
     openPlanet(id, station);
-  } else if (planetDialog.open) { planetDialog.close(); activePlanet = null; syncScrollLock(); }
+  } else if (planetDialog.open) { closePlanet(); }
 }
 window.addEventListener('hashchange', hashRoute);
 planetDialog.addEventListener('cancel', event => { event.preventDefault(); closePlanet(); });
@@ -310,40 +315,31 @@ for (const dialog of $$<HTMLDialogElement>('dialog')) {
 }
 const directionKey: Record<string, string> = { up: 'w', left: 'a', down: 's', right: 'd' };
 document.addEventListener('pointerdown', event => {
-  const button = (event.target as Element).closest<HTMLButtonElement>('[data-direction]');
+  const button = (event.target as Element).closest<HTMLButtonElement>('[data-direction], [data-flight-key]');
   if (!button) return;
   event.preventDefault();
   button.setPointerCapture(event.pointerId);
-  keys.add(directionKey[button.dataset.direction!]);
+  keys.add(button.dataset.flightKey === 'space' ? ' ' : button.dataset.flightKey ?? directionKey[button.dataset.direction!]);
   ensureFrame();
 });
 for (const name of ['pointerup','pointercancel','lostpointercapture']) document.addEventListener(name, event => {
-  const button = (event.target as Element).closest<HTMLButtonElement>('[data-direction]');
-  if (button) keys.delete(directionKey[button.dataset.direction!]);
+  const button = (event.target as Element).closest<HTMLButtonElement>('[data-direction], [data-flight-key]');
+  if (button) keys.delete(button.dataset.flightKey === 'space' ? ' ' : button.dataset.flightKey ?? directionKey[button.dataset.direction!]);
 });
 document.addEventListener('keydown', event => {
   if (event.ctrlKey || event.metaKey || event.altKey || (event.target as HTMLElement).matches('input,select,textarea,[contenteditable="true"]')) return;
   const key = event.key.toLowerCase();
   if (key === 'm' && !event.repeat) { event.preventDefault(); if (mapDialog.open) mapDialog.close(); else openMap(); return; }
-  if (settings.open || tutorial.open || mapDialog.open || (!flying && !planetDialog.open)) return;
-  if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key)) { event.preventDefault(); keys.add(key); ensureFrame(); }
-  if (key === 'e' && !event.repeat) {
-    if (activePlanet && planetDialog.open) {
-      const scene = $('.surface-scene').getBoundingClientRect();
-      const stations = $$<HTMLButtonElement>('.station');
-      let nearest = 0; let distance = Infinity;
-      stations.forEach((button, index) => {
-        const rect = button.getBoundingClientRect();
-        const d = Math.hypot(rect.x + rect.width / 2 - scene.x - roverPosition.x / 100 * scene.width, rect.y + rect.height / 2 - scene.y - roverPosition.y / 100 * scene.height);
-        if (d < distance) { distance = d; nearest = index; }
-      });
-      renderStation(nearest, true);
-    } else if (closest) travel(closest.id);
-  }
+  if (settings.open || tutorial.open || mapDialog.open || (!flying && !planetDialog.open) || (planetDialog.open && worldView === 'content')) return;
+  if (['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','shift'].includes(key)) { event.preventDefault(); keys.add(key); ensureFrame(); }
+  if (planetDialog.open && worldView === 'game') {
+    if ((key === 'e' || key === ' ') && !(event.target as HTMLElement).matches('button,a,summary')) { event.preventDefault(); keys.add(key); ensureFrame(); }
+    if (key === 'p' && !event.repeat) { event.preventDefault(); galaxy?.togglePause(); }
+  } else if (key === 'e' && !event.repeat && !planetDialog.open && closest) travel(closest.id);
 });
 document.addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
-window.addEventListener('blur', clearControls);
-document.addEventListener('visibilitychange', () => { clearControls(); if (!document.hidden) ensureFrame(); });
+window.addEventListener('blur', () => { clearControls(); galaxy?.pause(); });
+document.addEventListener('visibilitychange', () => { clearControls(); if (document.hidden) galaxy?.pause(); else ensureFrame(); });
 motionMedia.addEventListener('change', event => { if (!motionOverridden) { reducedMotion = event.matches; $<HTMLInputElement>('#motion-toggle').checked = reducedMotion; document.body.classList.toggle('reduced-motion', reducedMotion); } });
 touchMedia.addEventListener('change', syncTouchControls);
 
@@ -366,13 +362,13 @@ function tick(time: number) {
   if (document.hidden || mapDialog.open || tutorial.open || settings.open) return;
   const direction = directionVector(keys);
   if (planetDialog.open && activePlanet) {
-    const scene = $('.surface-scene');
-    roverPosition = advancePosition(roverPosition, direction, seconds, scene.clientWidth, scene.clientHeight, 105);
-    const rover = $('.rover'); rover.style.left = `${roverPosition.x}%`; rover.style.top = `${roverPosition.y}%`;
+    if (worldView === 'game') galaxy?.update(keys, seconds, reducedMotion);
   } else if (flying) {
     const smoothing = reducedMotion ? 1 : Math.min(1, seconds * 9);
     velocity.x += (direction.x - velocity.x) * smoothing; velocity.y += (direction.y - velocity.y) * smoothing;
-    shipPosition = advancePosition(shipPosition, velocity, seconds, worldSize.width, worldSize.height, touchMedia.matches ? 150 : 225);
+    const boosting = keys.has('shift') && !!(direction.x || direction.y);
+    shipPosition = advancePosition(shipPosition, velocity, seconds, worldSize.width, worldSize.height, (touchMedia.matches ? 150 : 225) * (boosting ? 4 : 1));
+    ship.classList.toggle('boosting', boosting); universe.classList.toggle('warping', boosting);
     if (direction.x || direction.y) {
       const desiredAngle = Math.atan2(direction.x, -direction.y) * 180 / Math.PI;
       let turn = (desiredAngle - shipAngle + 540) % 360 - 180;
@@ -395,6 +391,6 @@ function tick(time: number) {
 // Expose shareable case URLs, without coupling the data to the flight controls.
 document.addEventListener('click', event => {
   const button = (event.target as Element).closest<HTMLElement>('[data-station]');
-  if (button && activePlanet?.id === 'jornadas') history.replaceState(null, '', `#jornadas/${['worten','stone','missao'][activeStation]}`);
+  if (button && activePlanet?.id === 'jornadas') history.replaceState(null, '', `#jornadas/${['worten','missao'][activeStation]}`);
 });
 positionShip(); measureWorld(); hashRoute();

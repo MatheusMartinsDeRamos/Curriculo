@@ -42,9 +42,10 @@ A pasta `dist/` contém os arquivos prontos para hospedagem. Abrir o HTML direta
 
 ## O que está incluído
 
-- Seis planetas, cada um com três estações: Identidade, Trajetória, Jornadas, Sistemas, Mentoria e Conexão.
-- Pilotagem com WASD/setas, E para pousar e M para abrir o mapa. No celular, controles direcionais e botões por toque.
-- Caminhada pelas bases com WASD/setas e acesso direto a todas as estações por botões.
+- Seis planetas com galáxias navegáveis, radar e acesso ao conteúdo profissional pela aba **Estações & currículo**.
+- Pilotagem com WASD/setas, **Shift para velocidade da luz (4×)**, E para entrar em um planeta e M para abrir o mapa. No celular, setas e botão ⚡ por toque.
+- Cada galáxia tem um minigame: cristais (Identidade), corrida por portais (Trajetória), asteroides (Jornadas), reatores (Sistemas), resgate de cápsulas (Mentoria) e tiro ao alvo (Conexão).
+- Jogos com instruções, progresso, vitória, reinício e pausa com P. Ao trocar de aba do navegador ou ler o currículo, o jogo pausa. Nos reatores, E aciona; no tiro ao alvo, Espaço dispara.
 - Missão de três escolhas, com 27 combinações e explicações; o resultado conecta ao case real da Worten.
 - Currículo completo em HTML independente do jogo, com todas as 11 experiências, formação, certificações, tecnologias, idiomas e mentoria.
 - PDF original, contato por e-mail/WhatsApp/LinkedIn e cópia do e-mail.
@@ -59,7 +60,10 @@ A pasta `dist/` contém os arquivos prontos para hospedagem. Abrir o HTML direta
 | `src/content/profile.json` | Conteúdo profissional, datas, projetos, competências e contatos |
 | `src/content/planets.ts` | Nomes, posições, cores e estações dos planetas |
 | `src/main.ts` | Interface, navegação, cenas e textos de apresentação |
-| `src/flight.mjs` | Movimento, proximidade e regras da missão |
+| `src/flight.mjs` | Movimento, proximidade e regras da missão de CRM |
+| `src/galaxy.mjs` | Regras, física e estado dos seis minigames |
+| `src/galaxy-view.ts` | Câmera, cenários Canvas, radar e interface dos jogos |
+| `src/galaxy.css` | Layout das galáxias e controles de toque |
 | `src/styles.css` | Página inicial, mapa e controles |
 | `src/surfaces.css` | Cenas e conteúdo dos planetas |
 | `public/curriculo.pdf` | PDF original para download |
@@ -71,7 +75,7 @@ Após alterar o JSON, execute `npm run build`. O currículo HTML é gerado novam
 ## Links diretos
 
 - `/#identidade`, `/#trajetoria`, `/#jornadas`, `/#sistemas`, `/#mentoria`, `/#conexao`
-- `/#jornadas/worten`, `/#jornadas/stone`, `/#jornadas/missao`
+- `/#jornadas/worten`, `/#jornadas/missao`
 - `/curriculo.html` e `/curriculo.pdf`
 
 No GitHub Pages, acrescente esses caminhos após `/Curriculo`.
@@ -80,4 +84,4 @@ No GitHub Pages, acrescente esses caminhos após `/Curriculo`.
 
 O conteúdo vem do currículo FlowCV de 27/09/2026. Os resultados apresentados são relatos profissionais: cerca de 30 blocos reutilizáveis e redução aproximada de 75% no tempo de execução de campanhas na Worten. A missão é fictícia e não prevê resultados. Não há dados de clientes, diagramas internos, formulário com armazenamento ou métricas inventadas.
 
-Os canais de contato e o PDF são públicos quando o site é publicado. A página guarda apenas preferências de volume e movimento no armazenamento local do navegador.
+Os canais de contato e o PDF são públicos quando o site é publicado. O Case Stone foi retirado de Jornadas; o histórico de trabalho na Stone permanece no currículo. Os minigames funcionam localmente, sem rankings ou envio de pontuação. A página guarda apenas preferências de volume e movimento no armazenamento local do navegador.
