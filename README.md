@@ -2,6 +2,8 @@
 
 Portfólio interativo de **Matheus Martins de Ramos**, especialista em Martech e CRM. Uma exploração espacial em português com seis planetas, nave controlável, estações de conteúdo e uma missão educativa de CRM.
 
+Ideias futuras e estado de implementação: [Melhorias pendentes](./MELHORIAS_PENDENTES.md).
+
 **Endereço previsto:** https://matheusmartinsderamos.github.io/Curriculo/
 
 ## Publicar gratuitamente no GitHub Pages
