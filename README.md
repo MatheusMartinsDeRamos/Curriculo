@@ -56,7 +56,7 @@ A pasta `dist/` contém os arquivos prontos para hospedagem. Abrir o HTML direta
 - PDF original, contato por e-mail/WhatsApp/LinkedIn e cópia do e-mail.
 - Navegação por teclado, foco em diálogos, opção de movimento reduzido e respeito à preferência do sistema.
 - Som sintetizado opcional, desligado em cada nova visita; volume e movimento são preferências locais.
-- Layout responsivo, sem fontes remotas, imagens pesadas, serviços de análise.
+- Layout responsivo, sem fontes remotas, imagens pesadas ou serviços de análise.
 
 ## Atualizar o conteúdo
 
