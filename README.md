@@ -109,7 +109,7 @@ O frontend permanece no GitHub Pages. A API usa um Worker e banco D1 gerenciados
 
 1. Execute `npm run check` e `npm run build:ranking`.
 2. Faça um commit e envie o mesmo estado ao repositório de origem do projeto Sites existente. Use uma credencial temporária de publicação, sem gravá-la em arquivos ou no Git.
-3. Empacote **o conteúdo** de `release/ranking-build/` como um arquivo tar, incluindo `.openai/hosting.json` e `server/`.
+3. Empacote **o conteúdo** de `release/ranking-build/` como um arquivo tar, incluindo `.openai/hosting.json` e `dist/server/`.
 4. Salve uma versão no Sites com o SHA completo do commit enviado e o arquivo tar. Publique essa versão no projeto indicado por `.openai/hosting.json`.
 5. Confirme `/api/health` e `/api/leaderboard?game=sistemas&difficulty=junior`. Depois envie `main` ao GitHub para publicar o frontend.
 
