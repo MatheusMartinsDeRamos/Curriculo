@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Portfólio espacial de Matheus Martins de Ramos — Martech & CRM",
-  "engines": { "node": ">=22.12.0" },
+  "description": "PortfÃ³lio espacial de Matheus Martins de Ramos â€” Martech & CRM",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "node scripts/generate-resume.mjs && vite --host 127.0.0.1",
     "build": "tsc --noEmit && node scripts/generate-resume.mjs && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.mjs",
-    "check": "npm run test && npm run build"
+    "check": "npm run test && npm run build",
+    "build:ranking": "node scripts/build-ranking.mjs"
   },
   "devDependencies": {
     "typescript": "~5.9.3",

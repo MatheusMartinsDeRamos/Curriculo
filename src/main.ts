@@ -24,6 +24,8 @@ let activeStation = 0;
 let shipPosition = { x: 48, y: 52 };
 let galaxy: GalaxyView | null = null;
 let worldView: 'game' | 'content' = 'game';
+const unlockedWorlds = new Set<string>();
+try { JSON.parse(sessionStorage.getItem('orbita-unlocked') || '[]').forEach((id:string) => unlockedWorlds.add(id)); } catch {}
 let shipAngle = 32;
 let velocity = { x: 0, y: 0 };
 let closest: Planet | null = null;
@@ -138,12 +140,20 @@ function endFlying() {
   announce('Voo encerrado. Todos os planetas continuam disponíveis pelo mapa e pelo menu.');
 }
 
+function unlockWorld() {
+  if(!activePlanet)return;
+  unlockedWorlds.add(activePlanet.id);
+  try{sessionStorage.setItem('orbita-unlocked',JSON.stringify([...unlockedWorlds]));}catch{}
+  $('#world-content-tab').textContent='Estações & currículo ✓';
+}
 function setWorldView(view: 'game' | 'content') {
   worldView = view;
   clearControls();
   if (view === 'content') galaxy?.pause();
+  const locked=view==='content' && !!activePlanet && !unlockedWorlds.has(activePlanet.id);
   $('#galaxy-game').hidden = view !== 'game';
-  $('#world-content').hidden = view !== 'content';
+  $('#world-content').hidden = view !== 'content' || locked;
+  $('#world-access').hidden = !locked;
   $('#world-game-tab').setAttribute('aria-pressed', String(view === 'game'));
   $('#world-content-tab').setAttribute('aria-pressed', String(view === 'content'));
   ensureFrame();
@@ -158,8 +168,9 @@ function openPlanet(id: string, station?: number) {
   clearControls(); activePlanet = planet; activeStation = station ?? 0;
   const index = planets.indexOf(planet);
   planetDialog.style.setProperty('--planet-color', planet.color);
-  planetDialog.innerHTML = `<div class="dialog-topline"><span class="eyebrow"><span class="status-dot" style="background:${planet.color}"></span> PLANETA ${planet.name.toLocaleUpperCase('pt-BR')} / ${planet.region}</span><button class="text-button" id="takeoff-button">Decolar <span aria-hidden="true">↗</span></button></div><header class="planet-heading"><div><p class="eyebrow">${planet.kicker}</p><h2 id="planet-title">${planet.headline}</h2></div><span class="planet-index" aria-hidden="true">0${index + 1}</span></header><nav class="world-tabs" aria-label="Explorar planeta"><button id="world-game-tab" aria-pressed="true" aria-controls="galaxy-game">✦ Explorar galáxia</button><button id="world-content-tab" aria-pressed="false" aria-controls="world-content">Estações & currículo</button><button id="surface-map" class="world-map">Mapa ↗</button></nav><section id="galaxy-game" aria-label="Minigame de ${planet.name}"></section><div id="world-content" class="world-content" hidden><nav class="surface-tabs" aria-label="Estações de ${planet.name}">${planet.stations.map((name, i) => `<button data-station="${i}" aria-pressed="${i === activeStation}">${name}</button>`).join('')}</nav><section class="station-content" id="station-content" tabindex="-1" aria-label="Conteúdo da estação"></section></div>`;
-  galaxy = new GalaxyView($('#galaxy-game'), planet.id, message => { announce(message); tone(); }, clearControls);
+  planetDialog.innerHTML = `<div class="dialog-topline"><span class="eyebrow"><span class="status-dot" style="background:${planet.color}"></span> PLANETA ${planet.name.toLocaleUpperCase('pt-BR')} / ${planet.region}</span><button class="text-button" id="takeoff-button">Decolar <span aria-hidden="true">↗</span></button></div><header class="planet-heading"><div><p class="eyebrow">${planet.kicker}</p><h2 id="planet-title">${planet.headline}</h2></div><span class="planet-index" aria-hidden="true">0${index + 1}</span></header><nav class="world-tabs" aria-label="Explorar planeta"><button id="world-game-tab" aria-pressed="true" aria-controls="galaxy-game">✦ Explorar galáxia</button><button id="world-content-tab" aria-pressed="false" aria-controls="world-content">Estações & currículo</button><button id="surface-map" class="world-map">Mapa ↗</button></nav><section id="world-access" class="world-access" hidden aria-label="Acesso às estações"><span class="eyebrow">SUA EXPLORAÇÃO, SUAS REGRAS</span><h3>Que tal liberar esta aba jogando?</h3><p>Fica bem mais divertido conquistar o acesso pelo minigame. Mas, se quiser continuar “quebrando as regras”, tudo bem: aqui você tem liberdade para explorar como preferir.</p><div><button class="button button-primary" id="access-play">Vou tentar o minigame ↗</button><button class="button button-secondary" id="access-continue">Continuar mesmo assim ↗</button></div></section><section id="galaxy-game" aria-label="Minigame de ${planet.name}"></section><div id="world-content" class="world-content" hidden><nav class="surface-tabs" aria-label="Estações de ${planet.name}">${planet.stations.map((name, i) => `<button data-station="${i}" aria-pressed="${i === activeStation}">${name}</button>`).join('')}</nav><section class="station-content" id="station-content" tabindex="-1" aria-label="Conteúdo da estação"></section></div>`;
+  galaxy = new GalaxyView($('#galaxy-game'), planet.id, message => { announce(message); tone(); }, clearControls, unlockWorld, message => { unlockWorld(); setWorldView('content'); if(message){announce(message); const note=document.createElement('p');note.className='content-welcome';note.textContent=message;$('#station-content').prepend(note);} });
+  $('#world-content-tab').textContent=unlockedWorlds.has(planet.id)?'Estações & currículo ✓':'Estações & currículo ◇';
   renderStation(activeStation);
   setWorldView(station === undefined ? 'game' : 'content');
   showDialog(planetDialog);
@@ -258,6 +269,8 @@ document.addEventListener('click', event => {
   if (close) $<HTMLDialogElement>(`#${close.dataset.close}`).close();
   const button = target.closest('button');
   switch (button?.id) {
+    case 'access-continue': unlockWorld(); setWorldView('content'); break;
+    case 'access-play': setWorldView('game'); break;
     case 'world-game-tab': setWorldView('game'); break;
     case 'world-content-tab': setWorldView('content'); break;
     case 'takeoff-button': closePlanet(); break;

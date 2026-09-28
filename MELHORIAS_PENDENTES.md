@@ -4,7 +4,7 @@ Este arquivo registra ideias para implementar **depois**. Uma ideia permanece co
 
 ## 1. Ranking público dos minigames e acesso às estações
 
-**Estado:** Pendente. Nenhuma parte do ranking ou da regra de acesso foi implementada.
+**Estado:** Em andamento. Implementado e testado; falta confirmar a publicação da API e do frontend.
 
 - Ao concluir um desafio, mostrar o resultado e oferecer o registro no ranking público do respectivo planeta e nível de dificuldade.
 - Permitir que a pessoa informe seu nome. Para **gravar** o resultado, pedir também a URL do perfil do LinkedIn. Extrair o nome de usuário do caminho `/in/` e exibi-lo no ranking; decidir na implementação se o nome digitado aparece junto. Por exemplo, `https://www.linkedin.com/in/matheusramoscrm/` e `https://www.linkedin.com/in/matheusramoscrm/?utm=xyz&hsjdkdhf` devem exibir `matheusramoscrm`. Ignorar parâmetros de consulta e barras finais. Aceitar apenas URLs válidas do domínio LinkedIn.
@@ -16,14 +16,14 @@ Este arquivo registra ideias para implementar **depois**. Uma ideia permanece co
 
 ## 2. Novo minigame do planeta Sistemas
 
-**Estado:** Pendente. O jogo atual dos cinco reatores continua publicado.
+**Estado:** Em andamento. Espelhos orbitais implementado e testado nos quatro níveis; publicação em preparação.
 
 - Substituir o desafio atual por algo mais divertido e menos difícil para quem visita o site pela primeira vez.
 - Manter a nave como forma de explorar e agir. Pedir uma decisão simples de lógica, com instruções claras e retorno visual imediato.
 - Garantir que qualquer pessoa consiga concluir sem depender de descobrir uma sequência escondida. Testar a experiência no computador e no celular, inclusive no nível Júnior.
 - **Ideia inicial para avaliar:** conectar uma pequena rota de energia pilotando até pontos na ordem indicada; cada ponto dá uma pista visual para o seguinte. Escolher a mecânica final quando esta melhoria for implementada.
 
-### Mecânicas candidatas (ainda sem escolha final)
+### Histórico das mecânicas candidatas (Espelhos orbitais escolhido)
 
 1. **Espelhos orbitais — sugestão principal:** a nave pilota até dois ou três espelhos e os gira com **E** para refletir um feixe do reator até um satélite. O raio muda imediatamente após cada giro. Sem penalidade por tentativa; dicas visuais indicam o destino. O tempo de conclusão pode servir ao ranking.
 2. **Sequência de emergência:** três instalações têm dependências visíveis, como “a antena precisa de energia”. O jogador pilota até elas e escolhe uma ordem que ligue tudo. A interface mostra claramente o que ainda falta; uma ordem errada permite tentar de novo.
@@ -34,7 +34,7 @@ Para qualquer opção, manter Júnior muito simples, sem prazo apertado, e aumen
 
 ## 3. Quatro níveis de dificuldade e rankings separados
 
-**Estado:** Pendente. Ainda não existe escolha de nível.
+**Estado:** Em andamento. Os quatro níveis estão implementados nos seis jogos, com 24 combinações validadas; publicação em preparação.
 
 - Antes de cada minigame, permitir escolher **Júnior**, **Pleno**, **Sênior** ou **Especialista**.
 - Júnior deve ser **muito fácil** e Especialista **muito difícil**, com Pleno e Sênior entre os dois. Ajustar metas, tempo, velocidade, perigos ou pistas conforme a mecânica de cada planeta.
