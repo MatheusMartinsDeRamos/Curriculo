@@ -23,6 +23,15 @@ Este arquivo registra ideias para implementar **depois**. Uma ideia permanece co
 - Garantir que qualquer pessoa consiga concluir sem depender de descobrir uma sequência escondida. Testar a experiência no computador e no celular, inclusive no nível Júnior.
 - **Ideia inicial para avaliar:** conectar uma pequena rota de energia pilotando até pontos na ordem indicada; cada ponto dá uma pista visual para o seguinte. Escolher a mecânica final quando esta melhoria for implementada.
 
+### Mecânicas candidatas (ainda sem escolha final)
+
+1. **Espelhos orbitais — sugestão principal:** a nave pilota até dois ou três espelhos e os gira com **E** para refletir um feixe do reator até um satélite. O raio muda imediatamente após cada giro. Sem penalidade por tentativa; dicas visuais indicam o destino. O tempo de conclusão pode servir ao ranking.
+2. **Sequência de emergência:** três instalações têm dependências visíveis, como “a antena precisa de energia”. O jogador pilota até elas e escolhe uma ordem que ligue tudo. A interface mostra claramente o que ainda falta; uma ordem errada permite tentar de novo.
+3. **Rotas de energia:** um painel mostra a origem e o destino; a nave voa até bifurcações para apontar a energia pela rota correta. Cada escolha ilumina o trecho seguinte. Evitar transformar isso em outra corrida por portais.
+4. **Diagnóstico de satélites:** a nave escaneia três satélites, vê pistas simples (sem energia, sinal bloqueado, peça solta) e escolhe a ferramenta correspondente. Cada acerto repara um satélite; um erro explica a pista e permite nova tentativa.
+
+Para qualquer opção, manter Júnior muito simples, sem prazo apertado, e aumentar a quantidade de etapas e pistas falsas nos níveis seguintes. Testar se a solução fica clara apenas pelo que aparece na tela.
+
 ## 3. Quatro níveis de dificuldade e rankings separados
 
 **Estado:** Pendente. Ainda não existe escolha de nível.
